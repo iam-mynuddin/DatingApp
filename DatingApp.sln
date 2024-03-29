@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{93EFDAFC-8137-4CAB-B8CD-11693DE10B69}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{EA958051-A203-495A-A282-6D52FB9B6EDA}"
-EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client", "client\client.esproj", "{0A834C30-897C-4700-86CC-63D4379F5A2E}"
 EndProject
 Global
