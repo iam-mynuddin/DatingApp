@@ -14,6 +14,10 @@ interface WeatherForecast {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+
+  title = 'Dating App';
+  users: any;
+
   public forecasts: WeatherForecast[] = [];
 
   constructor(private http: HttpClient) {}
@@ -23,11 +27,11 @@ export class AppComponent implements OnInit {
   }
 
   getForecasts() {
-    this.http.get<WeatherForecast[]>('https://localhost:7009/weatherforecast').subscribe(
-      (result) => {this.forecasts = result;},
-      (error) => { console.error(error); }
-    );
+    this.http.get('https://localhost:7009/api/users').subscribe({
+      next: response => this.users = response,
+      error: error => console.log(error),
+      complete:()=>console.log("Request complete.")
+    });
   }
 
-  title = 'client';
 }
