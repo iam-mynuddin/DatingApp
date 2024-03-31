@@ -1,6 +1,7 @@
 ﻿using API.Data;
 using API.DTOs;
 using API.Entities;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
@@ -12,14 +13,16 @@ namespace API.Controllers
 {
     public class AccountController : BaseApiController
     {
+        private readonly ITokenService _tokenService;
         private readonly DataContext _context;
 
-        public AccountController(DataContext context)
+        public AccountController(DataContext context, ITokenService tokenService)
         {
+            _tokenService = tokenService;
             _context = context;
         }
         [HttpPost("register")] //POST api/account/register
-        public async Task<ActionResult<AppUser>>Register([FromBody]RegisterDTO dto) //FromBody is not required because api controller class knows where to look
+        public async Task<ActionResult<UserDTO>>Register([FromBody]RegisterDTO dto) //FromBody is not required because api controller class knows where to look
         {
             dto.Username=Regex.Replace(dto.Username, @"\s+", ""); 
             if (await UserExists(dto.Username)) return BadRequest(dto.Username+" already exists");
@@ -32,10 +35,14 @@ namespace API.Controllers
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return user;
+            return new UserDTO
+            {
+            Username=user.UserName,
+            Token=_tokenService.CreateToken(user)
+            };
         }
         [HttpPost("login")]
-        public async Task<ActionResult<AppUser>> Login(LoginDTO dto) //FromBody is not required because api controller class knows where to look
+        public async Task<ActionResult<UserDTO>> Login(LoginDTO dto) //FromBody is not required because api controller class knows where to look
         {
             var userFromDb=await _context.Users.SingleOrDefaultAsync(u=>u.UserName==dto.Username.ToLower());
             if(userFromDb==null) return Unauthorized("Incorrect username");
@@ -51,7 +58,11 @@ namespace API.Controllers
                 i++;
             }
 
-            return userFromDb;
+            return new UserDTO
+            {
+                Username = userFromDb.UserName,
+                Token = _tokenService.CreateToken(userFromDb)
+            };
         }
         [ApiExplorerSettings(IgnoreApi = true)]//Only to avoid error with swagger
         public async Task<bool> UserExists(string username)
