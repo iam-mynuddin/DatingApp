@@ -11,6 +11,8 @@ export class AccountService {
   private currentUserSource = new BehaviorSubject<User|null>(null);
   currentUser$ = this.currentUserSource.asObservable();
 
+  public myUserName: string="";
+
   constructor(private http: HttpClient) { }
 
   login(model: any) {
@@ -20,12 +22,14 @@ export class AccountService {
         if (user) {
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUserSource.next(user);
+          this.myUserName = user.username;
         }
       })
     )
   }
   setCurrentUser(user:User) {
     this.currentUserSource.next(user);
+    this.myUserName = user.username;
   }
   logout() {
     localStorage.removeItem('user');
