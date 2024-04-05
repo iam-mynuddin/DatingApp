@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from './_services/account.service';
+import { User } from './_models/user';
 
 interface WeatherForecast {
   date: string;
@@ -20,13 +22,21 @@ export class AppComponent implements OnInit {
 
   public forecasts: WeatherForecast[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private accountService:AccountService) {}
 
   ngOnInit() {
-    this.getForecasts();
+    this.getUsers();
+    this.setCurrentUser();
+  }
+  setCurrentUser() {
+    //const user: User = JSON.parse(localStorage.getItem('user')!);
+    const strUser = localStorage.getItem('user');
+    if (!strUser) return;
+    const user: User = JSON.parse(strUser);
+    this.accountService.setCurrentUser(user);
   }
 
-  getForecasts() {
+  getUsers() {
     this.http.get('https://localhost:5001/api/users').subscribe({
       next: response => this.users = response,
       error: error => console.log(error),
