@@ -1,0 +1,14 @@
+<h4>
+    Internal server error
+</h4>
+<ng-container>
+    <div class="">
+        <p class="text-info">Error message:</p><h6 class="text-danger" *ngIf="errors">Error:{{errors.message}}</h6>
+    </div>
+    <div class="">
+        <p class="text-info">Stack trace:</p> <h6 class="text-danger" *ngIf="errors">Error:{{errors.details}}</h6>
+    </div>
+</ng-container>
+<div class="container text-center">
+    <button class="btn btn-info text-center" routerLink="/">Return to home</button>
+</div>

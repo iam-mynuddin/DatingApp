@@ -1,0 +1,18 @@
+
+<ng-container>
+    <h3>
+        Created on purpose to test the server error handling
+    </h3>
+    <button class="btn btn-danger me-3" (click)="get500Error()">Get500Error</button>
+    <button class="btn btn-danger me-3" (click)="get400Error()">Get400Error</button>
+    <button class="btn btn-danger me-3" (click)="get401Error()">Get401Error</button>
+    <button class="btn btn-danger me-3" (click)="get404Error()">Get404Error</button>
+    <button class="btn btn-danger me-3" (click)="get400ValidationError()">Get400ValidationError</button>
+</ng-container>
+
+<div class="row mt-5" *ngIf="validationErrors.length>0">
+    <ul class="text-danger">
+        <li *ngFor="let error of validationErrors">{{error}}</li>
+    </ul>
+
+</div>
